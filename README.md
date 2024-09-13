@@ -1,0 +1,1 @@
+# mink-technical-test

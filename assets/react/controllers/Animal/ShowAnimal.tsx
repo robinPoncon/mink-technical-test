@@ -60,23 +60,30 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 				key={animal.id}
 			>
 				<div className="flex">
-					<img
-						className="w-12 h-12 my-auto cursor-pointer pr-1 bg-green-500 rounded-full hover:bg-green-600"
-						src="/icons/icon_chevron-left.svg"
-						alt="icon chevron left"
+					<button
+						className="w-12 h-12 my-auto pr-1 bg-green-500 rounded-full hover:bg-green-600"
 						onClick={() => CarouselManagement("previous")}
-					/>
+					>
+						<img
+							src="/icons/icon_chevron-left.svg"
+							alt="icon chevron left"
+						/>
+					</button>
+
 					<img
 						className="w-52 h-52 mx-auto rounded-md"
 						alt="animal image"
 						src={showDisplayedPhoto()}
 					/>
-					<img
+					<button
 						className="w-12 h-12 my-auto cursor-pointer pl-1 bg-green-500 rounded-full hover:bg-green-600"
-						src="/icons/icon_chevron-right.svg"
-						alt="icon chevron right"
 						onClick={() => CarouselManagement("next")}
-					/>
+					>
+						<img
+							src="/icons/icon_chevron-right.svg"
+							alt="icon chevron right"
+						/>
+					</button>
 				</div>
 				<p className="font-bold text-lg text-center">
 					Âge :{" "}

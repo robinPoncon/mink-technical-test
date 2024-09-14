@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AnimalController!{% endblock %}
+{% block title %}Tous les animaux de la ferme{% endblock %}
 
 {% block body %}
 
-<div class="example-wrapper">
-    <h1>Hello</h1>
+<section>
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Liste des animaux de la ferme</h1>
     <div {{ react_component("Animal/ShowAnimals", { "animals": animals }) }}></div>
-</div>
+</section>
 
 {% endblock %}
 

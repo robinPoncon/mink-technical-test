@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voici plus d'informations sur {{ animal.name }}{% endblock %}
+
+{% block body %}
+
+<section>
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Voici plus d'informations sur {{ animal.name }}</h1>
+    <div {{ react_component("Animal/ShowAnimal", { "animal": animal }) }}></div>
+</section>
+
+{% endblock %}

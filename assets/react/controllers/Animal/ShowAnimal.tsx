@@ -11,7 +11,6 @@ type PhotoObject = {
 };
 
 const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
-	console.log("test " + JSON.stringify(animal));
 	const formattedPrice = (price: number) => {
 		return price.toLocaleString("fr-FR", {
 			style: "currency",
@@ -22,7 +21,6 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 	};
 
 	const [allPhotos, setAllPhotos] = useState<PhotoObject[]>([]);
-	const [displayedPhoto, setDisplayedPhoto] = useState();
 
 	useEffect(() => {
 		if (animal.photos && animal.photos.length > 0) {
@@ -43,24 +41,59 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 		return findDisplayedPhoto?.src;
 	};
 
+	const CarouselManagement = (action: "next" | "previous") => {
+		const displayedPhotoIndex = allPhotos.findIndex((photo) => photo.isDisplayed === true);
+		const previousIndex =
+			displayedPhotoIndex === 0 ? allPhotos.length - 1 : displayedPhotoIndex - 1;
+		const nextIndex =
+			displayedPhotoIndex === allPhotos.length - 1 ? 0 : displayedPhotoIndex + 1;
+		const copyAllPhotos = [...allPhotos];
+		copyAllPhotos[displayedPhotoIndex].isDisplayed = false;
+		copyAllPhotos[action === "previous" ? previousIndex : nextIndex].isDisplayed = true;
+		setAllPhotos(copyAllPhotos);
+	};
+
 	return (
-		<div className="flex flex-wrap justify-around gap-10 mx-2">
+		<div className="flex flex-wrap justify-around gap-10 my-10 mx-2">
 			<div
-				className="flex flex-col gap-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 bg-white rounded-md p-5"
+				className="flex flex-col gap-4 w-full sm:w-1/2 md:w-1/3 lg:w-96 bg-white rounded-md p-5"
 				key={animal.id}
 			>
-				{animal.photos && animal.photos[0] ? (
+				<div className="flex">
 					<img
-						className="w-52 h-52 mx-auto"
+						className="w-12 h-12 my-auto cursor-pointer pr-1 bg-green-500 rounded-full hover:bg-green-600"
+						src="/icons/icon_chevron-left.svg"
+						alt="icon chevron left"
+						onClick={() => CarouselManagement("previous")}
+					/>
+					<img
+						className="w-52 h-52 mx-auto rounded-md"
 						alt="animal image"
 						src={showDisplayedPhoto()}
 					/>
-				) : null}
+					<img
+						className="w-12 h-12 my-auto cursor-pointer pl-1 bg-green-500 rounded-full hover:bg-green-600"
+						src="/icons/icon_chevron-right.svg"
+						alt="icon chevron right"
+						onClick={() => CarouselManagement("next")}
+					/>
+				</div>
+				<p className="font-bold text-lg text-center">
+					Âge :{" "}
+					<span className="italic">{animal.age > 1 ? `${animal.age} ans` : "1 an"}</span>
+				</p>
+				<p className="font-bold text-lg text-center">
+					Type : <span className="italic">{animal.type}</span>
+				</p>
 				<p className="font-bold text-lg text-center">
 					Race : <span className="italic">{animal.breed}</span>
 				</p>
 				<p className="font-bold text-lg text-center">
-					Prix : <span className="text-2xl">{formattedPrice(animal.price)}</span>
+					Description : <span className="italic">{animal.description}</span>
+				</p>
+				<p className="font-bold text-lg text-center">
+					Prix :{" "}
+					<span className="text-2xl text-green-700">{formattedPrice(animal.price)}</span>
 				</p>
 			</div>
 		</div>

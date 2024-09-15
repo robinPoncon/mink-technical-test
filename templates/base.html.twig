@@ -14,10 +14,30 @@
         {% endblock %}
     </head>
     <body class="bg-gray-200">
-        <a class="flex gap-2 w-fit mt-10 ml-10 py-2 px-3 bg-green-700 text-white font-bold rounded-md hover:bg-green-800" href="/">
-            <img class="w-6 h-6" src="/icons/icon_home.svg" alt="icon home">
-            Accueil
+        <div class="flex justify-between mx-10 mt-10">
+            <a class="flex gap-2 w-fit py-2 px-3 bg-green-700 text-white font-bold rounded-md hover:bg-green-800" href="/">
+                <img class="w-6 h-6" src="/icons/icon_home.svg" alt="icon home">
+                Accueil
             </a>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="flex gap-2">
+                    <p class="text-xl font-semibold my-auto mr-5">Bonjour {{ app.user.username }} !</p>
+                    <a class="bg-blue-600 flex gap-2 text-white font-semibold py-2 px-3 rounded-md w-fit mx-auto hover:bg-blue-700" href="/admin/dashboard">
+                        <p>Dashboard</p>
+                        <img class="w-6 h-6" src="/icons/icon_dashboard.svg" alt="icon dashboard">
+                    </a>
+                    <a class="flex gap-2 w-fit py-2 px-3 bg-green-700 text-white font-bold rounded-md hover:bg-green-800" href="/logout">
+                        Logout
+                        <img class="w-6 h-6" src="/icons/icon_logout.svg" alt="icon logout">
+                    </a>
+                </div>
+            {% else %}
+                <a class="flex gap-2 w-fit py-2 px-3 bg-green-700 text-white font-bold rounded-md hover:bg-green-800" href="/login">
+                    Login
+                    <img class="w-6 h-6" src="/icons/icon_login.svg" alt="icon login">
+                </a>
+            {% endif %}
+        </div>
         {% block body %}{% endblock %}
     </body>
 </html>

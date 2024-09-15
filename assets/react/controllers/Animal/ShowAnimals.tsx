@@ -1,23 +1,14 @@
 import React from "react";
 import { Animal } from "../../../types/animalType";
+import { formattedPrice } from "../Components/formattedPrice";
 
 type ShowAnimalsProps = {
 	animals: Animal[];
 };
 
 const ShowAnimals: React.FC<ShowAnimalsProps> = ({ animals }) => {
-	console.log("test " + JSON.stringify(animals));
-	const formattedPrice = (price: number) => {
-		return price.toLocaleString("fr-FR", {
-			style: "currency",
-			currency: "EUR",
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
-		});
-	};
-
 	return (
-		<div className="flex flex-wrap justify-around gap-10 mx-2">
+		<div className="flex flex-wrap justify-around py-10 gap-10 mx-2">
 			{animals?.map((animal) => (
 				<div
 					className="flex flex-col gap-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 bg-white rounded-md p-5"
@@ -41,7 +32,7 @@ const ShowAnimals: React.FC<ShowAnimalsProps> = ({ animals }) => {
 					</p>
 					<a
 						href={`/animal/${animal.id}`}
-						className="bg-green-600 py-2 px-3 rounded-md w-fit mx-auto hover:bg-green-700"
+						className="bg-green-600 text-white font-semibold py-2 px-3 rounded-md w-fit mx-auto hover:bg-green-700"
 					>
 						Voir en détail
 					</a>

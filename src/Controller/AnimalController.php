@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Animal;
+use App\Service\AnimalFormatter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,31 +11,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AnimalController extends AbstractController
 {
-    public function formatAnimal(Animal $animal): array {
-        return [
-            'id' => $animal->getId(),
-            'name' => $animal->getName(),
-            'age' => $animal->getAge(),
-            'type' => $animal->getType(),
-            'breed' => $animal->getBreed(),
-            'description' => $animal->getDescription(),
-            'price' => $animal->getPrice(),
-            'photos' => $animal->getPhotos(),
-        ];
-    }
+    private $animalFormatter;
 
-    public function formatAnimals(array $animals) {
-        return array_map(function (Animal $animal) {
-            return $this->formatAnimal($animal);
-        }, $animals);
+    public function __construct(AnimalFormatter $animalFormatter)
+    {
+        $this->animalFormatter = $animalFormatter;
     }
 
     #[Route('/', name: 'app_animal_index')]
     public function index(EntityManagerInterface $em): Response
     {
         $animals = $em->getRepository(Animal::class)->findAll();
-
-        $formattedAnimals = $this->formatAnimals($animals);
+        $formattedAnimals = $this->animalFormatter->formatAnimals($animals);
 
         return $this->render('animal/index.html.twig', [
             'animals' => $formattedAnimals,
@@ -48,7 +36,7 @@ class AnimalController extends AbstractController
             throw $this->createNotFoundException("Cet animal n'est plus en vente ou n'existe pas");
         }
 
-        $formatAnimal = $this->formatAnimal($animal);
+        $formatAnimal = $this->animalFormatter->formatAnimal($animal);
 
         return $this->render("animal/showAnimal.html.twig", [
             "animal" => $formatAnimal

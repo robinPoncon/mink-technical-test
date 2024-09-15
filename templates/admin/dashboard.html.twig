@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block body %}
+
+<section>
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Bienvenue sur votre dashboard !</h1>
+    <div {{ react_component("Dashboard/Dashboard", { "animals": animals }) }}></div>
+</section>
+
+{% endblock %}

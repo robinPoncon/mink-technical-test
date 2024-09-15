@@ -1,0 +1,10 @@
+{# templates/security/login.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Login</h1>
+    <div {{ react_component("Login/Login", { "lastUsername": lastUsername, "loginError": loginError }) }}></div>
+{% endblock %}

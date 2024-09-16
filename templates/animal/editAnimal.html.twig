@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un animal{% endblock %}
+
+{% block body %}
+
+<section>
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Mettre à jour {{ animal.name }}</h1>
+    <div {{ react_component("Animal/EditAnimal", { "animal": animal }) }}></div>
+</section>
+
+{% endblock %}

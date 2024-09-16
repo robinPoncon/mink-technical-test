@@ -32,7 +32,7 @@ class AnimalController extends AbstractController
         ]);
     }
 
-    #[Route('/animal/{id}', name: 'app_animal_show_detail', methods: ["GET"])]
+    #[Route('/animal/{id}', name: 'app_animal_show_detail', methods: ["GET"], requirements: ["id" => "\d+"])]
     public function showAnimal(int $id, EntityManagerInterface $em): Response {
         $animal = $em->getRepository(Animal::class)->find($id);
         if (!$animal) {
@@ -46,45 +46,56 @@ class AnimalController extends AbstractController
         ]);
     }
 
-    #[Route("/animal/supprimer/{id}", name: "delete_animal", methods: ["DELETE"])]
-    public function deleteAnimal($id, EntityManagerInterface $em, Security $security): JsonResponse
-    {
-        if (!$security->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Accès refusé.');
-        }
-
-        $animal = $em->getRepository(Animal::class)->find($id);
-
-        if (!$animal) {
-            return new JsonResponse(["status" => "Animal not found"], 404);
-        }
-
-        $em->remove($animal);
-        $em->flush();
-
-        return new JsonResponse(["status" => "success"], 200);
+    #[Route('/animal/ajouter', name: 'add_animal_form', methods: ["GET"])]
+    public function addAnimalForm(): Response {
+        return $this->render("animal/addAnimal.html.twig");
     }
 
-    #[Route('/animal/creer', name: 'create_animal', methods: ["POST"])]
-    public function createAnimal(EntityManagerInterface $em, Request $request, Security $security) {
+    #[Route('/animal/ajouter', name: 'add_animal', methods: ["POST"])]
+    public function addAnimal(EntityManagerInterface $em, Request $request, Security $security): JsonResponse {
         if (!$security->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
 
-        $data = json_decode($request->getContent(), true);
+        $name = $request->request->get('name');
+        $age = (int)$request->request->get('age');
+        $type = $request->request->get('type');
+        $breed = $request->request->get('breed');
+        $description = $request->request->get('description');
+        $price = (float)$request->request->get('price');
 
-        if (!$data["name"] || !$data["age"] || !$data["type"] || !$data["breed"] || !$data["price"]) {
+        if (!$name || !$age || !$type || !$breed || !$price) {
             return new JsonResponse(['message' => 'Erreur, il manque des données obligatoires.'], 400);
         }
 
         $animal = new Animal();
-        $animal->setName($data["name"]);
-        $animal->setAge($data["age"]);
-        $animal->setType($data["type"]);
-        $animal->setBreed($data["breed"]);
-        $animal->setDescription($data["description"] ?? null);
-        $animal->setPrice($data["price"]);
-        $animal->setPhotos($data["photos"] ?? null);
+        $animal->setName($name);
+        $animal->setAge($age);
+        $animal->setType($type);
+        $animal->setBreed($breed);
+        $animal->setDescription($description ?? null);
+        $animal->setPrice($price);
+
+        $validFormats = ["image/jpeg", "image/png", "image/jpg"];
+        $photos = $request->files->get('photos');
+        $uploadedPhotos = [];
+
+        if ($photos) {
+            foreach ($photos as $photo) {
+                if (in_array($photo->getMimeType(), $validFormats)) {
+                    // Déplacez le fichier vers le répertoire de stockage souhaité
+                    $fileName = uniqid() . '-' . $photo->getClientOriginalName(); // Génération d'un nom de fichier unique
+                    $photo->move($this->getParameter('kernel.project_dir') . '/public/uploads/animals', $fileName);
+                    
+                    // Ajoutez le chemin du fichier au modèle Animal
+                    $uploadedPhotos[] = $fileName;
+                } else {
+                    return new JsonResponse(['message' => 'Format de fichier non autorisé.'], 400);
+                }
+            }
+        }
+
+        $animal->setPhotos($uploadedPhotos);
 
         $em->persist($animal);
         $em->flush();
@@ -92,8 +103,8 @@ class AnimalController extends AbstractController
         return new JsonResponse(['status' => 'success'], 200);
     }
 
-    #[Route('/animal/{id}/editer', name: 'edit_animal', methods: ["POST"])]
-    public function editAnimal($id, Request $request, EntityManagerInterface $em, Security $security): JsonResponse {
+    #[Route('/animal/editer/{id}', name: 'edit_animal', methods: ["POST"])]
+    public function editAnimal(int $id, Request $request, EntityManagerInterface $em, Security $security): JsonResponse {
         if (!$security->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
@@ -122,6 +133,35 @@ class AnimalController extends AbstractController
         $em->flush();
 
         return new JsonResponse(['status' => 'success'], 200);
+    }
+
+    #[Route("/animal/supprimer/{id}", name: "delete_animal", methods: ["DELETE"])]
+    public function deleteAnimal(int $id, EntityManagerInterface $em, Security $security): JsonResponse
+    {
+        if (!$security->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
+        $animal = $em->getRepository(Animal::class)->find($id);
+
+        if (!$animal) {
+            return new JsonResponse(["status" => "Animal not found"], 404);
+        }
+
+        $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/uploads/animals';
+
+        $photos = $animal->getPhotos();
+        foreach ($photos as $photo) {
+            $photoPath = $uploadDirectory.'/'.$photo;
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+        }
+
+        $em->remove($animal);
+        $em->flush();
+
+        return new JsonResponse(["status" => "success"], 200);
     }
 }
 

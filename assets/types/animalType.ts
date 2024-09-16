@@ -1,10 +1,10 @@
 export interface Animal {
 	id?: number;
 	name: string;
-	age: number;
+	age: string;
 	type: string;
 	breed: string;
 	description?: string;
-	price: number;
-	photos?: string[];
+	price: string;
+	photos?: string[] | File[];
 }

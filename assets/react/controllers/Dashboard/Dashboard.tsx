@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Animal } from "../../../types/animalType";
+import { FlashMessage } from "../../../types/flashMessageType";
 import { formattedPrice } from "../Components/formattedPrice";
 
 type ShowAnimalsProps = {
-	animals: Animal[];
+	getAnimals: Animal[];
 };
 
-type FlashMessage = {
-	type: "success" | "error";
-	message: string;
-};
-
-const Dashboard: React.FC<ShowAnimalsProps> = ({ animals }) => {
+const Dashboard: React.FC<ShowAnimalsProps> = ({ getAnimals }) => {
+	const [animals, setAnimals] = useState<Animal[]>(getAnimals);
 	const [openModal, setOpenModal] = useState<boolean>(false);
 	const [animalSelected, setAnimalSelected] = useState<Animal | null>(null);
 	const [flashMessage, setFlashMessage] = useState<FlashMessage | null>(null);
@@ -42,6 +39,12 @@ const Dashboard: React.FC<ShowAnimalsProps> = ({ animals }) => {
 						type: "success",
 						message: `L'animal ${animalSelected.name} a bien été supprimé !`
 					});
+					const copyAnimals = [...animals];
+					const indexDelete = copyAnimals.findIndex(
+						(animal) => animal === animalSelected
+					);
+					copyAnimals.splice(indexDelete, 1);
+					setAnimals(copyAnimals);
 					setAnimalSelected(null);
 					setOpenModal(false);
 				} else {
@@ -88,7 +91,7 @@ const Dashboard: React.FC<ShowAnimalsProps> = ({ animals }) => {
 				</h2>
 				<a
 					className="flex py-2 px-3 gap-2 rounded-md bg-gray-700 text-white hover:bg-gray-900"
-					href="/animal/creer"
+					href="/animal/ajouter"
 				>
 					Ajouter
 					<img
@@ -133,7 +136,7 @@ const Dashboard: React.FC<ShowAnimalsProps> = ({ animals }) => {
 								<td className="p-4 flex gap-4">
 									<a
 										className="flex gap-2 bg-blue-600 text-white rounded-md py-2 px-3 hover:bg-blue-700"
-										href={`/animal/${animal.id}/editer`}
+										href={`/animal/editer/${animal.id}`}
 									>
 										<img
 											className="w-6 h-6"

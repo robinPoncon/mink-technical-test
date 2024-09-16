@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un animal{% endblock %}
+
+{% block body %}
+
+<section>
+    <h1 class="text-center my-20 text-3xl font-semibold mx-2">Ajouter un animal</h1>
+    <div {{ react_component("Animal/AddAnimal") }}></div>
+</section>
+
+{% endblock %}

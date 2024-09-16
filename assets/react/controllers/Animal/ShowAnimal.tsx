@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Animal } from "../../../types/animalType";
+import { formattedPrice } from "../Components/formattedPrice";
 
 type ShowAnimalProps = {
 	animal: Animal;
@@ -11,15 +12,6 @@ type PhotoObject = {
 };
 
 const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
-	const formattedPrice = (price: number) => {
-		return price.toLocaleString("fr-FR", {
-			style: "currency",
-			currency: "EUR",
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2
-		});
-	};
-
 	const [allPhotos, setAllPhotos] = useState<PhotoObject[]>([]);
 
 	useEffect(() => {
@@ -86,8 +78,7 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 					</button>
 				</div>
 				<p className="font-bold text-lg text-center">
-					Âge :{" "}
-					<span className="italic">{animal.age > 1 ? `${animal.age} ans` : "1 an"}</span>
+					Âge : <span className="italic">{`${animal.age} ans`}</span>
 				</p>
 				<p className="font-bold text-lg text-center">
 					Type : <span className="italic">{animal.type}</span>

@@ -11,11 +11,11 @@ class AnimalFormatter
         return [
             'id' => $animal->getId(),
             'name' => $animal->getName(),
-            'age' => $animal->getAge(),
+            'age' => (string) $animal->getAge(),
             'type' => $animal->getType(),
             'breed' => $animal->getBreed(),
             'description' => $animal->getDescription(),
-            'price' => $animal->getPrice(),
+            'price' => (string) $animal->getPrice(),
             'photos' => $animal->getPhotos(),
         ];
     }

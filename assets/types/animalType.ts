@@ -6,5 +6,6 @@ export interface Animal {
 	breed: string;
 	description?: string;
 	price: string;
-	photos?: string[] | File[];
+	photos: string[];
+	newPhotos: File[];
 }

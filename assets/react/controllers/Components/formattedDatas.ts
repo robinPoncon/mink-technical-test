@@ -9,16 +9,20 @@ export const formattedDatas = (data: Animal) => {
 	formData.append("description", data.description || "");
 	formData.append("price", data.price.toString());
 
-	if (data.photos) {
-		if (data.photos.length > 0 && data.photos[0] instanceof File) {
-			(data.photos as File[]).forEach((photo: File, index: number) => {
-				formData.append(`photos[${index}]`, photo);
-			});
-		} else {
-			(data.photos as string[]).forEach((photo: string, index: number) => {
-				formData.append(`photos[${index}]`, photo);
+	if (data.newPhotos) {
+		if (data.newPhotos.length > 0 && data.newPhotos[0] instanceof File) {
+			(data.newPhotos as File[]).forEach((photo: File, index: number) => {
+				formData.append(`newPhotos[${index}]`, photo);
 			});
 		}
+	}
+
+	if (data.photos && Array.isArray(data.photos)) {
+		(data.photos as string[]).forEach((photo: string, index: number) => {
+			if (typeof photo === "string") {
+				formData.append(`photos[${index}]`, photo);
+			}
+		});
 	}
 
 	return formData;

@@ -3,16 +3,12 @@ import { Animal } from "../../../types/animalType";
 import { FlashMessage } from "../../../types/flashMessageType";
 import { formattedDatas } from "../Components/formattedDatas";
 
-type AddAnimalProps = {
-	animal: Animal;
-};
-
 type errorMessages = {
 	name: string;
 	message: string | null;
 };
 
-const AddAnimal: React.FC<AddAnimalProps> = () => {
+const AddAnimal = () => {
 	const [flashMessage, setFlashMessage] = useState<FlashMessage | null>(null);
 	const [errorMessages, setErrorMessages] = useState<errorMessages[]>([
 		{ name: "name", message: null },
@@ -29,8 +25,11 @@ const AddAnimal: React.FC<AddAnimalProps> = () => {
 		breed: "",
 		description: "",
 		price: "",
-		photos: []
+		photos: [],
+		newPhotos: []
 	});
+
+	console.log(formData);
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -58,7 +57,7 @@ const AddAnimal: React.FC<AddAnimalProps> = () => {
 			const filesArray = Array.from(getPhotos);
 			setFormData({
 				...formData,
-				photos: filesArray
+				newPhotos: filesArray
 			});
 		}
 	};

@@ -77,17 +77,14 @@ class AnimalController extends AbstractController
         $animal->setPrice($price);
 
         $validFormats = ["image/jpeg", "image/png", "image/jpg"];
-        $photos = $request->files->get('photos');
+        $photos = $request->files->get('newPhotos');
         $uploadedPhotos = [];
 
         if ($photos) {
             foreach ($photos as $photo) {
                 if (in_array($photo->getMimeType(), $validFormats)) {
-                    // Déplacez le fichier vers le répertoire de stockage souhaité
-                    $fileName = uniqid() . '-' . $photo->getClientOriginalName(); // Génération d'un nom de fichier unique
+                    $fileName = uniqid() . '-' . $photo->getClientOriginalName(); 
                     $photo->move($this->getParameter('kernel.project_dir') . '/public/uploads/animals', $fileName);
-                    
-                    // Ajoutez le chemin du fichier au modèle Animal
                     $uploadedPhotos[] = $fileName;
                 } else {
                     return new JsonResponse(['message' => 'Format de fichier non autorisé.'], 400);
@@ -103,35 +100,78 @@ class AnimalController extends AbstractController
         return new JsonResponse(['status' => 'success'], 200);
     }
 
+    #[Route('/animal/editer/{id}', name: 'edit_animal_form', methods: ["GET"])]
+    public function editAnimalForm($id, EntityManagerInterface $em): Response {
+        $animal = $em->getRepository(Animal::class)->find($id);
+        if (!$animal) {
+            throw $this->createNotFoundException("Cet animal n'est plus en vente ou n'existe pas");
+        }
+
+        $formatAnimal = $this->animalFormatter->formatAnimal($animal);
+
+        return $this->render("animal/editAnimal.html.twig", [
+            "animal" => $formatAnimal
+        ]);
+    }
+
     #[Route('/animal/editer/{id}', name: 'edit_animal', methods: ["POST"])]
-    public function editAnimal(int $id, Request $request, EntityManagerInterface $em, Security $security): JsonResponse {
+    public function editAnimal($id, Animal $animal, Request $request, EntityManagerInterface $em, Security $security): JsonResponse {
         if (!$security->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
-
+    
         $animal = $em->getRepository(Animal::class)->find($id);
+        $name = $request->request->get('name');
+        $age = (int)$request->request->get('age');
+        $type = $request->request->get('type');
+        $breed = $request->request->get('breed');
+        $description = $request->request->get('description');
+        $price = (float)$request->request->get('price');
 
-        if (!$animal) {
-            return new JsonResponse(['message' => 'Animal not found'], 404);
-        }
-
-        $data = json_decode($request->getContent(), true);
-
-        if (!$data["name"] || !$data["age"] || !$data["type"] || !$data["breed"] || !$data["price"]) {
+        if (!$name || !$age || !$type || !$breed || !$price) {
             return new JsonResponse(['message' => 'Erreur, il manque des données obligatoires.'], 400);
         }
 
-        $animal->setName($data["name"]);
-        $animal->setAge($data["age"]);
-        $animal->setType($data["type"]);
-        $animal->setBreed($data["breed"]);
-        $animal->setDescription($data["description"] ?? null);
-        $animal->setPrice($data["price"]);
-        $animal->setPhotos($data["photos"] ?? null);
+        $animal->setName($name);
+        $animal->setAge($age);
+        $animal->setType($type);
+        $animal->setBreed($breed);
+        $animal->setDescription($description ?? null);
+        $animal->setPrice($price);
 
+        $validFormats = ["image/jpeg", "image/png", "image/jpg"];
+        $newPhotos = $request->files->get('newPhotos', []);
+        $existingPhotos = $request->request->all('photos');
+        $uploadedPhotos = [];
+        $currentPhotosInDb = $animal->getPhotos() ?? [];
+        $photosToDelete = array_diff($currentPhotosInDb, $existingPhotos);
+    
+        foreach ($photosToDelete as $photoToDelete) {
+            $photoPath = $this->getParameter('kernel.project_dir') . '/public/uploads/animals/' . $photoToDelete;
+            if (file_exists($photoPath)) {
+                unlink($photoPath); 
+            }
+        }
+    
+        $uploadedPhotos = array_merge($uploadedPhotos, $existingPhotos);
+    
+        if ($newPhotos) {
+            foreach ($newPhotos as $photo) {
+                if ($photo && in_array($photo->getMimeType(), $validFormats)) {
+                    $fileName = uniqid() . '-' . $photo->getClientOriginalName(); 
+                    $photo->move($this->getParameter('kernel.project_dir') . '/public/uploads/animals', $fileName);
+                    $uploadedPhotos[] = $fileName;
+                } else {
+                    return new JsonResponse(['message' => 'Format de fichier non autorisé.'], 400);
+                }
+            }
+        }
+
+        $animal->setPhotos($uploadedPhotos);
+    
         $em->persist($animal);
         $em->flush();
-
+    
         return new JsonResponse(['status' => 'success'], 200);
     }
 

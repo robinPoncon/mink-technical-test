@@ -34,7 +34,7 @@ class CreateUserCommand extends Command
         $this
             ->addArgument('email', InputArgument::REQUIRED, 'The email of the user')
             ->addArgument('password', InputArgument::REQUIRED, 'The password of the user')
-            ->addArgument('firstname', InputArgument::REQUIRED, 'The firstname of the user')
+            ->addArgument('username', InputArgument::REQUIRED, 'The username of the user')
             ->addOption('role', null, InputOption::VALUE_OPTIONAL, 'The role of the user', 'ROLE_USER');
     }
 
@@ -45,7 +45,7 @@ class CreateUserCommand extends Command
         // Get the input arguments
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
-        $firstname = $input->getArgument('username');
+        $username = $input->getArgument('username');
         $role = $input->getOption('role');
 
         // Check if the user already exists
@@ -58,7 +58,7 @@ class CreateUserCommand extends Command
         // Create the new user
         $user = new User();
         $user->setEmail($email);
-        $user->setUsername($firstname);
+        $user->setUsername($username);
         $user->setRoles([$role]);
 
         // Hash the password

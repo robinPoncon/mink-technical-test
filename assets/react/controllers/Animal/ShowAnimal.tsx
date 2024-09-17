@@ -48,35 +48,42 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 	return (
 		<div className="flex flex-wrap justify-around gap-10 my-10 mx-2">
 			<div
-				className="flex flex-col gap-4 w-full sm:w-1/2 md:w-1/3 lg:w-96 bg-white rounded-md p-5"
+				className="flex flex-col gap-4 w-full sm:w-96 bg-white rounded-md p-5"
 				key={animal.id}
 			>
-				<div className="flex">
-					<button
-						className="w-12 h-12 my-auto pr-1 bg-green-500 rounded-full hover:bg-green-600"
-						onClick={() => CarouselManagement("previous")}
-					>
-						<img
-							src="/icons/icon_chevron-left.svg"
-							alt="icon chevron left"
-						/>
-					</button>
+				{allPhotos.length > 0 && (
+					<div className="flex">
+						{allPhotos.length > 1 && (
+							<button
+								className="w-8 h-8 my-auto pr-1 bg-green-500 rounded-full hover:bg-green-600 sm:w-12 sm:h-12"
+								onClick={() => CarouselManagement("previous")}
+							>
+								<img
+									src="/icons/icon_chevron-left.svg"
+									alt="icon chevron left"
+								/>
+							</button>
+						)}
 
-					<img
-						className="w-52 h-52 mx-auto rounded-md"
-						alt="animal image"
-						src={showDisplayedPhoto()}
-					/>
-					<button
-						className="w-12 h-12 my-auto cursor-pointer pl-1 bg-green-500 rounded-full hover:bg-green-600"
-						onClick={() => CarouselManagement("next")}
-					>
 						<img
-							src="/icons/icon_chevron-right.svg"
-							alt="icon chevron right"
+							className="w-40 h-40 mx-auto rounded-md sm:w-52 sm:h-52"
+							alt="animal image"
+							src={showDisplayedPhoto()}
 						/>
-					</button>
-				</div>
+
+						{allPhotos.length > 1 && (
+							<button
+								className="w-8 h-8 my-auto cursor-pointer pl-1 bg-green-500 rounded-full hover:bg-green-600 sm:w-12 sm:h-12"
+								onClick={() => CarouselManagement("next")}
+							>
+								<img
+									src="/icons/icon_chevron-right.svg"
+									alt="icon chevron right"
+								/>
+							</button>
+						)}
+					</div>
+				)}
 				<p className="font-bold text-lg text-center">
 					Âge : <span className="italic">{`${animal.age} ans`}</span>
 				</p>
@@ -86,9 +93,11 @@ const ShowAnimal: React.FC<ShowAnimalProps> = ({ animal }) => {
 				<p className="font-bold text-lg text-center">
 					Race : <span className="italic">{animal.breed}</span>
 				</p>
-				<p className="font-bold text-lg text-center">
-					Description : <span className="italic">{animal.description}</span>
-				</p>
+				{animal.description && (
+					<p className="font-bold text-lg text-center">
+						Description : <span className="italic">{animal.description}</span>
+					</p>
+				)}
 				<p className="font-bold text-lg text-center">
 					Prix :{" "}
 					<span className="text-2xl text-green-700">{formattedPrice(animal.price)}</span>

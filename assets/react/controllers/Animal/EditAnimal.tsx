@@ -115,8 +115,6 @@ const EditAnimal: React.FC<EditAnimalProps> = ({ animal }) => {
 			copyFormData.price = animal.price;
 			copyFormData.photos = animal.photos;
 
-			console.log(animal.photos);
-
 			setFormData(copyFormData);
 		}
 	}, [animal]);
@@ -154,9 +152,9 @@ const EditAnimal: React.FC<EditAnimalProps> = ({ animal }) => {
 	};
 
 	return (
-		<div>
+		<div className="mx-2">
 			<form
-				className="w-96 mx-auto flex flex-col gap-5"
+				className="w-full mx-auto flex flex-col gap-5 sm:w-96"
 				onSubmit={handleSubmit}
 			>
 				{flashMessage && (
@@ -279,16 +277,16 @@ const EditAnimal: React.FC<EditAnimalProps> = ({ animal }) => {
 					)}
 				</div>
 
-				<div className="flex flex-col">
+				<div className="flex flex-col gap-5">
 					<label htmlFor="photos">Photos</label>
-					<div className="flex gap-4">
+					<div className="flex gap-10 flex-col md:flex-row md:gap-4">
 						{formData.photos.map((photo, index) => (
 							<div
 								key={index}
-								className="relative"
+								className="relative w-52 h-52 mx-auto"
 							>
 								<img
-									className="w-52 h-52 mx-auto"
+									className="w-full h-full object-cover"
 									src={`/uploads/animals/${photo}`}
 									alt="photo animal"
 								/>

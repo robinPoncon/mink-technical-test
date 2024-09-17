@@ -55,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ lastUsername, loginError }) => {
 
 	return (
 		<form
-			className="w-96 mx-auto flex flex-col gap-5"
+			className="flex flex-col gap-5 mx-2 sm:mx-auto sm:w-96"
 			method="post"
 			action="/login"
 		>

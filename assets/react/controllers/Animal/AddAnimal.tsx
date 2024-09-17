@@ -29,8 +29,6 @@ const AddAnimal = () => {
 		newPhotos: []
 	});
 
-	console.log(formData);
-
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 		let valueInput = value;
@@ -126,9 +124,9 @@ const AddAnimal = () => {
 	};
 
 	return (
-		<div>
+		<div className="mx-2">
 			<form
-				className="w-96 mx-auto flex flex-col gap-5"
+				className="w-full mx-auto flex flex-col gap-5 sm:w-96"
 				onSubmit={handleSubmit}
 			>
 				{flashMessage && (

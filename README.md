@@ -95,3 +95,17 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
     ```bash
     php bin/console app:create-user admin@test.com password123 Admin --role=ROLE_ADMIN
     ```
+
+## Démarrage du serveur
+
+13. **Lancer le serveur Symfony en arrière-plan** :
+
+    ```bash
+    symfony serve -d
+    ```
+
+14. **Tester le projet en accédant à l'adresse suivante** :
+
+    ```bash
+    http://127.0.0.1:8000
+    ```

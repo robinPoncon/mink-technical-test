@@ -98,14 +98,8 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
 
 ## Démarrage du serveur
 
-13. **Lancer le serveur Symfony en arrière-plan** :
+13. **Lancer le serveur Symfony en arrière-plan et tester le projet** :
 
     ```bash
     symfony serve -d
-    ```
-
-14. **Tester le projet en accédant à l'adresse suivante** :
-
-    ```bash
-    http://127.0.0.1:8000
     ```

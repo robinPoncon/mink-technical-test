@@ -42,3 +42,55 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
     ```
 
     Remplacer username, password et dbname par vos propres informations de base de données.
+
+5. **Installer les dépendances PHP via Composer** :
+
+    ```bash
+    composer install
+    ```
+
+6. **Installer les dépendances JavaScript via npm** :
+
+    ```bash
+    npm install
+    ```
+
+7. **Compiler les assets front-end** :
+
+    ```bash
+    npm run build
+    ```
+
+## Configuration de la base de données
+
+8. **Créer la base de donnée** :
+
+    ```bash
+    php bin/console doctrine:database:create
+    ```
+
+9. **Exécuter les migrations pour mettre à jour le schéma de la base de données** :
+
+    ```bash
+    php bin/console doctrine:migrations:migrate
+    ```
+
+10. **Charger les fixtures pour peupler la base de données avec des données de test** :
+
+    ```bash
+    php bin/console doctrine:fixtures:load
+    ```
+
+## Création d'un utilisateur administrateur
+
+11. **Créez un utilisateur administrateur avec les informations suivantes** :
+    . Email : admin@test.com
+    . Mot de passe : password123
+    . Nom d'utilisateur : Admin
+    . Rôle : ROLE_ADMIN
+
+Exemple :
+
+    ```bash
+    php bin/console app:create-user admin@test.com password123 Admin --role=ROLE_ADMIN
+    ```

@@ -84,12 +84,13 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
 ## Création d'un utilisateur administrateur
 
 11. **Créez un utilisateur administrateur avec les informations suivantes** :
-    . Email : admin@test.com
-    . Mot de passe : password123
-    . Nom d'utilisateur : Admin
-    . Rôle : ROLE_ADMIN
 
-Exemple :
+-   Email : admin@test.com
+-   Mot de passe : password123
+-   Nom d'utilisateur : Admin
+-   Rôle : ROLE_ADMIN
+
+12. **Exemple** :
 
     ```bash
     php bin/console app:create-user admin@test.com password123 Admin --role=ROLE_ADMIN

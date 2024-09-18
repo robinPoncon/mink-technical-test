@@ -1,38 +1,38 @@
 # Mink Technical Test
 
-Ce projet est une application Symfony/React destinée à des fins de test technique. Suivez les instructions ci-dessous pour installer et configurer l'application sur votre machine locale.
+This project is a Symfony/React application intended for technical testing purposes. Follow the instructions below to install and configure the application on your local machine.
 
-## Prérequis
+## Requirements
 
-Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre machine :
+Before you start, make sure you have installed the following tools on your machine :
 
 -   [PHP 8.x](https://www.php.net/downloads.php)
 -   [Composer](https://getcomposer.org/)
--   [MySQL](https://www.mysql.com/) ou tout autre SGBD compatible
+-   [MySQL](https://www.mysql.com/) or any other compatible DBMS
 -   [Node.js et npm](https://nodejs.org/)
 -   [Symfony CLI](https://symfony.com/download)
 
 ## Installation
 
-1. **Cloner le dépôt** :
+1. **Clone the repository** :
 
     ```bash
     git clone https://github.com/robinPoncon/mink-technical-test.git
     ```
 
-2. **Aller dans le dossier du projet créé** :
+2. **Go to the project folder** :
 
     ```bash
     cd mink-technical-test
     ```
 
-3. **Créer un fichier .env à la racine du projet** :
+3. **Create an .env file at the root of the project** :
 
     ```bash
     touch .env
     ```
 
-4. **Configurer le fichier .env avec ces variables** :
+4. **Configure the .env file with these variables** :
 
     ```bash
     DATABASE_URL=mysql://username:password@127.0.0.1:3306/dbname
@@ -41,64 +41,64 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants sur votre
     MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
     ```
 
-    Remplacer username, password et dbname par vos propres informations de base de données.
+    Replace username, password and dbname with your own database information.
 
-5. **Installer les dépendances PHP via Composer** :
+5. **Installing PHP dependencies via Composer** :
 
     ```bash
     composer install
     ```
 
-6. **Installer les dépendances JavaScript via npm** :
+6. **Installing JavaScript dependencies via npm** :
 
     ```bash
     npm install
     ```
 
-7. **Compiler les assets front-end** :
+7. **Compiling front-end assets** :
 
     ```bash
     npm run build
     ```
 
-## Configuration de la base de données
+## Database configuration
 
-8. **Créer la base de donnée** :
+8. **Creating the database** :
 
     ```bash
     php bin/console doctrine:database:create
     ```
 
-9. **Exécuter les migrations pour mettre à jour le schéma de la base de données** :
+9. **Perform migrations to update the database schema** :
 
     ```bash
     php bin/console doctrine:migrations:migrate
     ```
 
-10. **Charger les fixtures pour peupler la base de données avec des données de test** :
+10. **Load fixtures to populate the database with test data** :
 
     ```bash
     php bin/console doctrine:fixtures:load
     ```
 
-## Création d'un utilisateur administrateur
+## Creating an administrator user
 
-11. **Créez un utilisateur administrateur avec les informations suivantes** :
+11. **Create an administrator user with the following information** :
 
 -   Email : admin@test.com
--   Mot de passe : password123
--   Nom d'utilisateur : Admin
--   Rôle : ROLE_ADMIN
+-   Password : password123
+-   Username : Admin
+-   Role : ROLE_ADMIN
 
-12. **Exemple** :
+12. **Example** :
 
     ```bash
     php bin/console app:create-user admin@test.com password123 Admin --role=ROLE_ADMIN
     ```
 
-## Démarrage du serveur
+## Starting the server
 
-13. **Lancer le serveur Symfony en arrière-plan et tester le projet** :
+13. **Run the Symfony server and test the project** :
 
     ```bash
     symfony serve -d
